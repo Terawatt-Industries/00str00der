@@ -66,26 +66,26 @@ module 00str00der() {
 			union() {
 				extruder_base();
 				// Position the extruder block
-				translate([-9,block_offset,0]) rotate([0,0,180]) extruder_block();
+				translate([-7,block_offset,0]) rotate([0,0,180]) extruder_block();
 				// Add mounts for hinge
-				translate([-8,9+block_offset,11/2-42.3/2-5.5]) cube([12.5,26,8],center=true);
-				translate([-8,17+block_offset,-17]) rotate([0,90,0]) cylinder(r=10/2,h=12.5,center=true);
-				translate([-14.20,11+block_offset,11/2-42.3/2-5.5]) rotate([0,0,-90]) fillet(2,8);
-				translate([-1.825,11+block_offset,11/2-42.3/2-5.5]) rotate([0,0,180]) fillet(2,8);
+				translate([-6,9+block_offset,11/2-42.3/2-5.5]) cube([12.5,26,8],center=true);
+				translate([-6,17+block_offset,-17]) rotate([0,90,0]) cylinder(r=10/2,h=12.5,center=true);
+				translate([-12 + 0.01,11+block_offset,11/2-42.3/2-5.5]) rotate([0,0,-90]) fillet(2,8);
+				translate([0 - 0.01,11+block_offset,11/2-42.3/2-5.5]) rotate([0,0,180]) fillet(2,8);
 			}
 			/// Make a hole for the filament 3.5mm wide w/ a little slot room
 			for (i = [0:0.25:filament_slot]) {
-				translate([-8,block_offset+6.75-i-filament_slot/2,0]) color("Blue",1) cylinder(r=filament_hole/2,h=100,center=true);
+				translate([-6,block_offset+6.75-i-filament_slot/2,0]) color("Blue",1) cylinder(r=filament_hole/2,h=100,center=true);
 			}
 			for (i = [0:0.25:1.25]) {
-				translate([-8,block_offset+6.75-i,0]) color("Blue",1) cylinder(r=3.5/2,h=100,center=true);
+				translate([-6,block_offset+6.75-i,0]) color("Blue",1) cylinder(r=3.5/2,h=100,center=true);
 			}
 
 			if (bowden == 0) {
 				// Make a hole for the hotend (j-head style)
-				translate([-8,block_offset+6.75-filament_slot,-20.5]) hotend_w_screws();
+				translate([-6,block_offset+6.75-filament_slot,-20.5]) hotend_w_screws();
 			} else {
-				translate([-8,block_offset+6.75-filament_slot,-32.2+pushfit_h/2]) cylinder(r=pushfit_dia/2,h=pushfit_h,center=true);
+				translate([-6,block_offset+6.75-filament_slot,-32.2+pushfit_h/2]) cylinder(r=pushfit_dia/2,h=pushfit_h,center=true);
 				//mounting holes
 				translate([0,-3,-26]) rotate([0,90,0]) cylinder(r=2.05,h=100,center=true);
 				translate([0,7,-26]) rotate([0,90,0]) cylinder(r=2.05,h=100,center=true);
@@ -99,11 +99,11 @@ module 00str00der() {
 
 		//Add a solid layer for better prints -- will have to cut hole after
 		if (bowden == 0) {
-			translate([-8,block_offset+6.75-filament_slot,-20.75]) cylinder(r=(5/16*25.4)+0.25,h=0.25);
+			translate([-6,block_offset+6.75-filament_slot,-20.75]) cylinder(r=(5/16*25.4)+0.25,h=0.25);
 		} else {
-			translate([-8,block_offset+6.75-filament_slot,-32.2+pushfit_h-0.05]) cylinder(r=(5/16*25.4)+0.25,h=0.25);
+			translate([-6,block_offset+6.75-filament_slot,-32.2+pushfit_h-0.05]) cylinder(r=(5/16*25.4)+0.25,h=0.25);
 		}
-		translate([-8,block_offset+6.75,-20.75]) cylinder(r=(5/16*25.4)+0.25,h=0.25);
+		translate([-6,block_offset+6.75,-20.75]) cylinder(r=(5/16*25.4)+0.25,h=0.25);
 	}
 }
 

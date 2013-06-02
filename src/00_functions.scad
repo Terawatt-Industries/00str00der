@@ -2,6 +2,7 @@ use <MCAD/motors.scad>
 use <MCAD/nuts_and_bolts.scad>
 
 module fillet(rad,height) {
+	translate([-rad,-rad,0])
 	difference() {
 		translate([0,0,-height/2]) cube([rad-0.05,rad-0.05,height]);
 cylinder(h=height+1,r=rad,center=true);
