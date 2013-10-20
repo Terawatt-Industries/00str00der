@@ -1,5 +1,5 @@
-// authors:  thigiverse (link), l. miller, f. beachler
-// see (link) for GPL license
+// authors:  thingiverse (link), l. miller, f. beachler
+// see (link) for GPLv3 license
 
 use <MCAD/motors.scad>
 use <MCAD/nuts_and_bolts.scad>
@@ -8,7 +8,7 @@ use <wadeidler.scad>
 $fn=100;
 
 /////// Global Settings ////////
-bowden = 0;
+bowden = 1;
 pushfit_dia = 0.339*25.4;
 pushfit_h = 0.25*25.4;
 
@@ -22,8 +22,8 @@ filament_slot = 1;
 //smallP = 22.4;  // small pulley diameter
 bigP = 40.9;    // large pulley diameter - 65T plastic
 //bigP = 38.96;    // large pulley diameter - 62 alum
-smallP = 10.2;  // small pulley diameter - 16T plastic
-//smallP = 10.8;  // small pulley diameter - 16T alum
+//smallP = 10.2;  // small pulley diameter - 16T plastic
+smallP = 10.8;  // small pulley diameter - 16T alum
 belt_len = 88 * 2;  // for gt2 pulleys #of teeth x 2mm pitch
 
 
@@ -38,26 +38,32 @@ corr = 0.001937038323*pow(Bval,10) - 0.05808154202*pow(Bval,9) + 0.761293059*pow
 // Calculate the pulley separation distance
 Cval = Aval/corr;
 
-echo(Aval);
-echo(Bval);
-echo(Cval);
-echo(corr);
 motor_maxdist = 34.85;  //ctc dist from motor center to hob center at zero offset
 block_offset = Cval - motor_maxdist;
-echo(block_offset);
 
-// TODO parametrize - needs module params, calcs above should be in 00_functions or a config file
-00str00der();
+// TODO parametrize - needs module params
+00str00der_main();
 
-//uncomment this section to see pulleys and bearings
-/*translate([5,12,0]) rotate([0,90,0]) large_pulley_w_hob();
-translate([1.35,12,0]) rotate([0,90,0]) 608_bearing();
-translate([-17,12,0]) rotate([0,90,0]) 608_bearing();
-translate([-8,12+22/2+8/2-0.5,0]) rotate([0,90,0]) 608_bearing();
-translate([-8,16.5,0]) color("Blue",1) cylinder(r=3.5/2,h=100,center=true);
-translate([0,-52+42.3/2,-5]) rotate([0,90,0]) stepper_w_pulley(); 
-translate([6,22,-34]) rotate([90,0,0]) rotate([0,-90,0]) wadeidler();
-*/
+module 00str00der_main() {
+	echo(Aval);
+	echo(Bval);
+	echo(Cval);
+	echo(corr);
+	echo(block_offset);
+	00str00der();
+	// uncomment this to see pulleys and bearings
+	pulleys_and_bearings();
+}
+
+module pulleys_and_bearings() {
+	translate([5,12,0]) rotate([0,90,0]) large_pulley_w_hob();
+	translate([1.35,12,0]) rotate([0,90,0]) 608_bearing();
+	translate([-17,12,0]) rotate([0,90,0]) 608_bearing();
+	translate([-8,12+22/2+8/2-0.5,0]) rotate([0,90,0]) 608_bearing();
+	translate([-8,16.5,0]) color("Blue",1) cylinder(r=3.5/2,h=100,center=true);
+	translate([0,-52+42.3/2,-5]) rotate([0,90,0]) stepper_w_pulley(); 
+	translate([6,22,-34]) rotate([90,0,0]) rotate([0,-90,0]) wadeidler();
+}
 
 // TODO parametrize this module and _all_ dependent modules
 module 00str00der() {
