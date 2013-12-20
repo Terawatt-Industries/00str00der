@@ -7,10 +7,10 @@
 ## Uses distinct namespace. Jekyll settings should go at the root level.
 githubiverse:
     ## Metadata
-    title: "Terawatt Industries MendelMax 1.6"
+    title: "00str00der Belt-Driven Extruder"
     author: Terawatt Industries
-    license: Creative Commons 3.0 Share-Alike with Attribution
-    tags: [3d printer,calibration,printer parts, calibration cube,cube]
+    license: GPLv3 for SCAD.  CC ShareAlike, Non-Commercial for ANT script.
+    tags: [3d printer,leadscrew,x-ends,mendelmax,mendelmax 1.5,reprap]
 
     ## Github project parameters.
     github:
