@@ -8,7 +8,7 @@ use <wadeidler.scad>
 $fn=100;
 
 /////// Global Settings ////////
-bowden = 1;
+bowden = 0;
 pushfit_dia = 0.339*25.4;
 pushfit_h = 0.25*25.4;
 
@@ -18,12 +18,13 @@ filament_slot = 1;
 // TODO move to a config SCAD, see other TODOs
 /////// Global Parameters Calculation ////////
 /// Enter pulley diameters HERE
-//bigP = 37.69;    // large pulley diameter
-//smallP = 22.4;  // small pulley diameter
-bigP = 40.9;    // large pulley diameter - 65T plastic
+//bigP = 37.69;    // large pulley diameter - ???
+//smallP = 22.4;  // small pulley diameter - ???
+bigP = 38.2;	// large pulley diameter - 60T plastic
+//bigP = 40.9;    // large pulley diameter - 65T plastic
 //bigP = 38.96;    // large pulley diameter - 62 alum
-//smallP = 10.2;  // small pulley diameter - 16T plastic
-smallP = 10.8;  // small pulley diameter - 16T alum
+smallP = 10.2;  // small pulley diameter - 16T plastic
+//smallP = 10.8;  // small pulley diameter - 17T alum
 belt_len = 88 * 2;  // for gt2 pulleys #of teeth x 2mm pitch
 
 
@@ -52,7 +53,7 @@ module 00str00der_main() {
 	echo(block_offset);
 	00str00der();
 	// uncomment this to see pulleys and bearings
-	pulleys_and_bearings();
+	// pulleys_and_bearings();
 }
 
 module pulleys_and_bearings() {
