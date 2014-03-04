@@ -1,6 +1,15 @@
 use <MCAD/motors.scad>
 use <MCAD/nuts_and_bolts.scad>
 
+// Calculate parameters for pulley separation
+function aVal(belt_len, bigP, smallP) = (belt_len / 2) - 0.7855 * (bigP + smallP);
+function bVal(a, bigP, smallP) = a / (bigP - smallP);
+function cVal(a, corr) = a / corr;
+
+///// Calculate the correction factor
+///// fit from tabulated data @ http://www.york-ind.com/print_cat/engineering.pdf
+function corr(b) = 0.001937038323*pow(b,10) - 0.05808154202*pow(b,9) + 0.761293059*pow(b,8) - 5.736122913*pow(b,7) + 27.47727309*pow(b,6) - 87.33413058*pow(b,5) + 186.371874*pow(b,4) - 263.6175218*pow(b,3) + 236.7515116*pow(b,2) - 122.301777*pow(b,1) + 28.86267614;
+
 module fillet(rad,height) {
 	translate([-rad,-rad,0])
 	difference() {

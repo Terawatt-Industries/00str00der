@@ -12,7 +12,7 @@ bowden = 0;
 pushfit_dia = 0.339*25.4;
 pushfit_h = 0.25*25.4;
 
-filament_hole = 2.25;
+filament_hole = 3.3;
 filament_slot = 1;
 
 // TODO move to a config SCAD, see other TODOs
@@ -23,57 +23,49 @@ filament_slot = 1;
 bigP = 38.2;	// large pulley diameter - 60T plastic
 //bigP = 40.9;    // large pulley diameter - 65T plastic
 //bigP = 38.96;    // large pulley diameter - 62 alum
-smallP = 10.2;  // small pulley diameter - 16T plastic
+smallP = 10.2;  // small pulley diameter - 16T alum
 //smallP = 10.8;  // small pulley diameter - 17T alum
-belt_len = 88 * 2;  // for gt2 pulleys #of teeth x 2mm pitch
-
-
-// Calculate parameters for pulley separation
-Aval = (belt_len/2)-0.7855*(bigP+smallP);
-Bval = Aval/(bigP-smallP);
-
-///// Calculate the correction factor
-///// fit from tabulated data @ http://www.york-ind.com/print_cat/engineering.pdf
-corr = 0.001937038323*pow(Bval,10) - 0.05808154202*pow(Bval,9) + 0.761293059*pow(Bval,8) - 5.736122913*pow(Bval,7) + 27.47727309*pow(Bval,6) - 87.33413058*pow(Bval,5) + 186.371874*pow(Bval,4) - 263.6175218*pow(Bval,3) + 236.7515116*pow(Bval,2) - 122.301777*pow(Bval,1) + 28.86267614;
-
-// Calculate the pulley separation distance
-Cval = Aval/corr;
+belt_len = 90 * 2;  // for gt2 pulleys #of teeth x 2mm pitch
 
 motor_maxdist = 34.85;  //ctc dist from motor center to hob center at zero offset
-block_offset = Cval - motor_maxdist;
 
-// TODO parametrize - needs module params
 00str00der_main();
 
-module 00str00der_main() {
-	echo(Aval);
-	echo(Bval);
-	echo(Cval);
-	echo(corr);
-	echo(block_offset);
-	00str00der();
+module 00str00der_main(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pushfit_h, filament_hole = filament_hole, filament_slot = filament_slot, bigP = bigP, smallP = smallP, belt_len = belt_len, motor_maxdist = motor_maxdist) {
+   assign(AVal = aVal(belt_len, bigP, smallP)) {
+	assign(BVal = bVal(AVal, bigP, smallP)) {
+	assign(correction = corr(BVal)) {
+	assign(CVal = cVal(AVal, correction)) {
+	assign(block_offset = cVal(AVal, correction) - motor_maxdist) {
+		echo(AVal);
+		echo(BVal);
+		echo(CVal);
+		echo(correction);
+		echo(block_offset);
+		00str00der(bowden, pushfit_dia, pushfit_h, filament_hole, filament_slot, bigP, smallP, belt_len, motor_maxdist, AVal, BVal, CVal, correction, block_offset);
 	// uncomment this to see pulleys and bearings
 	// pulleys_and_bearings();
+	}}}}}
 }
 
-module pulleys_and_bearings() {
+module pulleys_and_bearings(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pushfit_h, filament_hole = filament_hole, filament_slot = filament_slot, bigP = bigP, smallP = smallP, belt_len = belt_len, motor_maxdist = motor_maxdist, AVal, BVal, CVal, correction, block_offset) {
 	translate([5,12,0]) rotate([0,90,0]) large_pulley_w_hob();
 	translate([1.35,12,0]) rotate([0,90,0]) 608_bearing();
 	translate([-17,12,0]) rotate([0,90,0]) 608_bearing();
 	translate([-8,12+22/2+8/2-0.5,0]) rotate([0,90,0]) 608_bearing();
-	translate([-8,16.5,0]) color("Blue",1) cylinder(r=3.5/2,h=100,center=true);
+	translate([-6,19,0]) color("Blue",1) cylinder(r=3.5/2,h=100,center=true);
 	translate([0,-52+42.3/2,-5]) rotate([0,90,0]) stepper_w_pulley(); 
 	translate([6,22,-34]) rotate([90,0,0]) rotate([0,-90,0]) wadeidler();
 }
 
 // TODO parametrize this module and _all_ dependent modules
-module 00str00der() {
+module 00str00der(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pushfit_h, filament_hole = filament_hole, filament_slot = filament_slot, bigP = bigP, smallP = smallP, belt_len = belt_len, motor_maxdist = motor_maxdist, AVal, BVal, CVal, correction, block_offset) {
 	union() {
 		difference() {
 			union() {
-				extruder_base();
+				extruder_base(bowden, pushfit_dia, pushfit_h, filament_hole, filament_slot, bigP, smallP, belt_len, motor_maxdist, AVal, BVal, CVal, correction, block_offset);
 				// Position the extruder block
-				translate([-7,block_offset,0]) rotate([0,0,180]) extruder_block();
+				translate([-7,block_offset,0]) rotate([0,0,180]) extruder_block(bowden, pushfit_dia, pushfit_h, filament_hole, filament_slot, bigP, smallP, belt_len, motor_maxdist, AVal, BVal, CVal, correction, block_offset);
 				// Add mounts for hinge
 				translate([-6,9+block_offset,11/2-42.3/2-5.5]) cube([12.5,26,8],center=true);
 				translate([-6,17+block_offset,-17]) rotate([0,90,0]) cylinder(r=10/2,h=12.5,center=true);
@@ -114,8 +106,9 @@ module 00str00der() {
 	}
 }
 
-// TODO parametrize this module, 00str00der depends on it
-module extruder_block() {
+// TODO add parameters for block dimensions such as filament
+// diameter - currently fixed
+module extruder_block(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pushfit_h, filament_hole = filament_hole, filament_slot = filament_slot, bigP = bigP, smallP = smallP, belt_len = belt_len, motor_maxdist = motor_maxdist, AVal, BVal, CVal, correction, block_offset) {
 	difference() {
 		minkowski() {
 
@@ -159,8 +152,8 @@ module extruder_block() {
 	}
 }
 
-// TODO parametrize this module, 00str00der depends on it
-module extruder_base() {
+// TODO add parameters for base dimensions - currently fixed
+module extruder_base(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pushfit_h, filament_hole = filament_hole, filament_slot = filament_slot, bigP = bigP, smallP = smallP, belt_len = belt_len, motor_maxdist = motor_maxdist, AVal, BVal, CVal, correction, block_offset) {
 	difference() {
 		minkowski() {
 			difference() {
@@ -175,7 +168,7 @@ module extruder_base() {
 		//translate([-8, -23, -20]) rotate([0,180,0]) cylinder(r = 2.2, h = 35,center=true);
 		translate([-8, -43, -20]) rotate([0,180,0]) cylinder(r = 2.2, h = 35,center=true);
 		//translate([-8, -23, -10.5]) rotate([0,180,0]) cylinder(r = 3.2, h = 35,center=true);
-		translate([-8, -43, -10.5]) rotate([0,180,0]) cylinder(r = 3.5, h = 35,center=true);
+		translate([-8, -43, -10.75]) rotate([0,180,0]) cylinder(r = 4.75, h = 35,center=true);
 
 		// Add a slotted motor mount
 		for (i = [-2:0.5:1.5]) {

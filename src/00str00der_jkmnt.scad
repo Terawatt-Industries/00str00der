@@ -1,10 +1,9 @@
 // 00str00der-jkmnt is a mounting plate to attach an 00str00der base
-// to Jonas Kuehling's x-carriage (http://www.thingiverse.com/thing:18657)
+// to Jonas Kuehling's x-carriage (link)
 // authors:  f. beachler
 // license:  Creative Commons Commercial 3.0 share-alike w/attribution
 
 use <MCAD/nuts_and_bolts.scad>
-// For complete model with attached 00str00der and x-carriage uncomment these lines and enter the file-path below to the x-carriage you're using.
 //use <00str00der.scad>
 //use <../[path_to_xcarriage]/jonaskueling_x-carriage/jonaskuehling_x-carriage_lm8uu.scad>
 
@@ -37,7 +36,7 @@ module mntplate_jk(t, w, l, m4d) {
 		// carriage mnt holes
 		mntholes_jk(t, m4d);
 		// extruder mnt holes
-		translate([16, -8, -t - 10]) rotate([0, 180, 90]) mntholes_00str00der(t, m4d);
+		translate([15, -8, -t - 10]) rotate([0, 180, 90]) mntholes_00str00der(t, m4d);
 	}
 }
 
@@ -50,7 +49,7 @@ module mntholes_00str00der(t, m4d) {
 		for (x = [-8]) {
 			translate([x, -43, -t * 2 - 0.01]) rotate([0,180,0]) cylinder(r = 2.2, h = t + 5,center=true);
 			// countersink holes
-			translate([x, -43, -t * 2 - 0.01 - 3]) rotate([0,180,0]) cylinder(r = 7 / 2 + 0.5, h = t,center=true,$fn=6);
+			translate([x, -43, -t * 2 - 0.01 - 2]) rotate([0,180,0]) cylinder(r = 3.9, h = t,center=true);
 		}
 }
 
