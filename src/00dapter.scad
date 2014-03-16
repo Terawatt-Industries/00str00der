@@ -8,7 +8,7 @@ Adapts existing J-Head/RepRapFab-compatible extruder, such as Wade's or Greg Fro
 $fn = 100;
 
 jhead_mnt_depth = 9.5;
-d = 15.875 - 0.5;
+d = (5/16 * 25.4 + 0.25) * 2;
 fw = 3.5;
 rnd = 2;
 nippleheight = 1.5;
