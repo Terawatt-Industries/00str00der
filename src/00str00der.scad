@@ -9,7 +9,7 @@ $fn=100;
 
 /////// Global Settings ////////
 bowden = 0;
-pushfit_dia = 0.339*25.4;
+pushfit_dia = 0.375*25.4;
 pushfit_h = 0.25*25.4;
 
 filament_hole = 3.3;
@@ -93,7 +93,7 @@ module 00str00der(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pushfi
 			}
 
 			// Make a hole for the hinge mount
-			translate([0,block_offset+17,-16.5]) rotate([0,90,0]) cylinder(r=3/2+0.2,h=100,center=true);
+			translate([0,block_offset+17,-16.5]) rotate([0,90,0]) cylinder(r=2 + 0.2,h=100,center=true);
 		}
 
 		//Add a solid layer for better prints -- will have to cut hole after
@@ -113,7 +113,7 @@ module extruder_block(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pu
 		minkowski() {
 
 			// Main block
-			translate([0,0,-4]) cube([20,18,44.3],center=true);
+			translate([0,0,-4]) cube([24,18,44.3],center=true);
 
 			// Contour edges with minkowski
 			translate([-1,0,0]) rotate([0,90,0]) cylinder(r=2,h=4,center=true);
@@ -128,7 +128,7 @@ module extruder_block(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pu
 
 		// Clear the hobbed bolt
 		//% translate([12,-2,0]) rotate([0,90,0]) large_pulley_w_hob();
-		translate([12 - 0.01, -2, 0]) rotate([0,90,0]) cylinder(r = 8 / 2 + 0.2, h=50, center=true);
+		translate([12 - 0.01, -2, 0]) rotate([0,90,0]) cylinder(r = 8 / 2 + 0.2, h=100, center=true);
 
 		// Make spots for the 608 bearings that retain hob
 		translate([11.35,-2,0]) rotate([0,90,0]) 608_bearing();
@@ -171,7 +171,7 @@ module extruder_base(bowden = bowden, pushfit_dia = pushfit_dia, pushfit_h = pus
 		translate([-8, -43, -10.75]) rotate([0,180,0]) cylinder(r = 4.75, h = 35,center=true);
 
 		// Add a slotted motor mount
-		for (i = [-2:0.5:1.5]) {
+		for (i = [-2:0.5:2]) {
 		translate([0,-52+42.3/2+i,-5]) rotate([0,90,0]) stepper_w_pulley2();
 		}
 	}
