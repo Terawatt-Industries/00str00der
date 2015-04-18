@@ -1,5 +1,6 @@
-   ANT Build script for OpenSCAD
-   Copyright 2012 Free Beachler, Terawatt Industries, Longevity Software LLC
-
    This product includes software developed by Free Beachler, Terawatt Industries
    doing business as Longevity Software LLC.
+
+ANT Build script for OpenSCAD        
+Copyright 2012-2014 Free Beachler, Longevity Software LLC d.b.a. Terawatt Industries
+All Rights ReservedOpenSCAD ANT Build by Free Beachler, Longevity Software DBA Terawatt Industries is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.  Additional rights can be obtained from the author.
