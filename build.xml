@@ -1,5 +1,10 @@
 <?xml version="1.0" ?>
-<!-- OpenSCAD ANT Build by Free Beachler, Longevity Software DBA Terawatt Industries is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. -->
+<!--
+	ANT Build script for OpenSCAD
+	Copyright 2012-2014 Free Beachler, Longevity Software LLC d.b.a. Terawatt Industries
+	All Rights Reserved
+
+	OpenSCAD ANT Build by Free Beachler, Longevity Software DBA Terawatt Industries is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. -->
 <project name="00str00der" default="compile-scad-to-stl" xmlns:fl="antlib:it.haefelinger.flaka">
     <!-- initialize some props -->
     <property name="proj" value="00str00der" />
@@ -19,6 +24,20 @@
     <property file="${isUnix}settings.properties" />
 	<echo message="Load property file: ${isUnix}settings.properties" />
     <fl:install-property-handler />
+
+    <!-- load profile -->
+	<condition property="profile-id" value="${profileId}" else="profile-ddrive-60TBP-16TSP-88TB">
+		<isset property="profileId" />
+	</condition>
+	<typedef name="loadBuildProfile" classname="com.longevitysoft.ant.ProfilePropertyBuilder">
+		<classpath>
+			<pathelement location="${basedir}/${build-tools-dir-name}/lsoft-ant-tasks-0.1-20120804.jar" />
+		</classpath>
+	</typedef>
+
+	<target name="load-profile-properties" description="load build profiles xml as ant properties">
+		<loadBuildProfile xmlFile="${build-tools-dir-name}/build_profiles.xml" profileId="${profile-id}" />
+	</target>
 
 	<target name="pkg-source-files" description="TAR and GZIP the /src fileset">
 		<property name="tar-filename"  value="${dist-dir}/${proj}-source"/>
@@ -94,5 +113,32 @@
             </fl:switch>
         </fl:for>
     </target>
+
+
+	<target name="--clean-filtered-scad" description="scrub filtered code files">
+		<delete file="${src-dir}/ant_assembly.scad" />
+	</target>
+
+	<target name="build-filtered-assembly-scad" depends="--clean-filtered-scad,load-profile-properties" description="build the filtered scad code to assemble multiple parts">
+        <property name="scad-assembly" value="${src-dir}/ant_assembly.scad" />
+        <property name="scad-assembly-template" value="${basedir}/tools/build/ant_assembly.scad.tpl" />
+		<echo message="filtering code for the '${profile-id}' profile ..." />
+        <copy file="${scad-assembly-template}" tofile="${scad-assembly}"/>
+        <replace file="${scad-assembly}" token="!scad.method!" value="${method}" />
+        <replace file="${scad-assembly}" token="!scad.bowden!" value="${bowden}" />
+        <replace file="${scad-assembly}" token="!scad.filament_hole!" value="${filament_hole}" />
+        <replace file="${scad-assembly}" token="!scad.bigP!" value="${bigP}" />
+        <replace file="${scad-assembly}" token="!scad.smallP!" value="${smallP}" />
+        <replace file="${scad-assembly}" token="!scad.belt_len!" value="${belt_len}" />
+        <echo message="compile assembly -> STL ..." />
+        <exec executable="${exec.path.oscad}">
+            <arg line="-o ${dist-dir}/${output-file}.stl" />
+            <arg line="-D 'quality=&quot;production&quot;'" />
+            <arg line="${scad-assembly}" />
+        </exec>
+        <echo message="cleanup assembly template ..." />
+        <delete file="${scad-assembly}"/>
+        <echo message="done" />
+	</target>
 
 </project>

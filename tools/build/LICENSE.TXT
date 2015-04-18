@@ -1,0 +1,3 @@
+   ANT Build script for OpenSCAD
+   Copyright 2012-2014 Free Beachler, Longevity Software LLC d.b.a. Terawatt Industries
+   All Rights Reserved
